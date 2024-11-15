@@ -130,12 +130,13 @@ with st.sidebar:
 # Function to process delivery data and create embeddings
 def process_delivery_data(text_data):
     try:
-        # Create embeddings using OpenAI
-        response = openai.Embedding.create(
+        # Create embeddings using OpenAI client
+        client = OpenAI(api_key=api_key)
+        response = client.embeddings.create(
             input=text_data,
             model="text-embedding-ada-002"
         )
-        return np.array([response['data'][0]['embedding']])
+        return np.array([response.data[0].embedding])
     except Exception as e:
         st.error(f"Error creating embeddings: {str(e)}")
         return None
@@ -159,7 +160,8 @@ def generate_risk_analysis(context, query):
         5. Regional variations
         """
 
-        chat = openai.ChatCompletion.create(
+        client = OpenAI(api_key=api_key)
+        chat = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": "You are ShopRisk, an AI expert in e-commerce delivery risk analysis."},
