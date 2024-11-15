@@ -114,8 +114,8 @@ with st.sidebar:
     
     options = option_menu(
         menu_title="Navigation",
-        options=["Home", "Risk Analysis", "Data Insights", "Settings"],
-        icons=["house", "graph-up", "lightbulb", "gear"],
+        options=["Home", "Risk Analysis"],
+        icons=["house", "graph-up"],
         menu_icon="cast",
         default_index=0,
         styles={
@@ -199,6 +199,38 @@ if options == "Home":
 elif options == "Risk Analysis":
     st.title("Risk Analysis")
     
+    # Add query guidance before file upload
+    st.markdown("""
+    ### 🤔 How to Ask ShopRisk Questions
+
+    You can ask questions about:
+
+    1. **Financial Loss Predictions**
+       - Example: "What's the expected financial loss for Shopee deliveries in Manila next month?"
+       - Example: "Predict potential losses for Lazada in Cebu during the Christmas season"
+
+    2. **Risk Assessments**
+       - Example: "Which areas have the highest delivery failure risk during rainy season?"
+       - Example: "What are the risk factors for CourierX in Metro Manila?"
+
+    3. **Courier Performance**
+       - Example: "Compare CourierX and CourierY performance in Davao"
+       - Example: "Which courier has the lowest financial losses in NCR?"
+
+    4. **Regional Analysis**
+       - Example: "Show me the riskiest regions for deliveries"
+       - Example: "Compare delivery success rates between Manila and Cebu"
+
+    5. **Seasonal Patterns**
+       - Example: "How do holiday seasons affect delivery risks?"
+       - Example: "What's the impact of typhoon season on deliveries?"
+
+    **Tips for Better Results:**
+    - Include location/region
+    - Mention timeframe if relevant
+    - Be specific about metrics you're interested in
+    """)
+    
     # File uploader for delivery data
     uploaded_file = st.file_uploader("Upload delivery data (CSV, Excel)", type=['csv', 'xlsx'])
     
@@ -250,13 +282,3 @@ elif options == "Risk Analysis":
                         
         except Exception as e:
             st.error(f"Error processing file: {str(e)}")
-
-# Options : Data Insights
-elif options == "Data Insights":
-    st.title("Data Insights")
-    # Add data visualization and insights features here
-
-# Options : Settings
-elif options == "Settings":
-    st.title("Settings")
-    # Add settings configuration options here
