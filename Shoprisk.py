@@ -199,38 +199,6 @@ if options == "Home":
 elif options == "Risk Analysis":
     st.title("Risk Analysis")
     
-    # Add query guidance before file upload
-    st.markdown("""
-    ### 🤔 How to Ask ShopRisk Questions
-
-    You can ask questions about:
-
-    1. **Financial Loss Predictions**
-       - Example: "What's the expected financial loss for Shopee deliveries in Manila next month?"
-       - Example: "Predict potential losses for Lazada in Cebu during the Christmas season"
-
-    2. **Risk Assessments**
-       - Example: "Which areas have the highest delivery failure risk during rainy season?"
-       - Example: "What are the risk factors for CourierX in Metro Manila?"
-
-    3. **Courier Performance**
-       - Example: "Compare CourierX and CourierY performance in Davao"
-       - Example: "Which courier has the lowest financial losses in NCR?"
-
-    4. **Regional Analysis**
-       - Example: "Show me the riskiest regions for deliveries"
-       - Example: "Compare delivery success rates between Manila and Cebu"
-
-    5. **Seasonal Patterns**
-       - Example: "How do holiday seasons affect delivery risks?"
-       - Example: "What's the impact of typhoon season on deliveries?"
-
-    **Tips for Better Results:**
-    - Include location/region
-    - Mention timeframe if relevant
-    - Be specific about metrics you're interested in
-    """)
-    
     # File uploader for delivery data
     uploaded_file = st.file_uploader("Upload delivery data (CSV, Excel)", type=['csv', 'xlsx'])
     
@@ -260,25 +228,83 @@ elif options == "Risk Analysis":
                 
                 st.success("Data processed successfully!")
                 
-                # Risk analysis query input
-                user_query = st.text_area("Enter your risk analysis query:", 
-                                        help="Example: What are the main risk factors affecting deliveries in Metro Manila?")
+                # Query sections with optional inputs
+                st.markdown("### 🤔 Ask ShopRisk Questions")
+                st.markdown("Fill in any relevant sections for your analysis:")
                 
-                if st.button("Generate Analysis"):
-                    if user_query:
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    # Financial Box
+                    with st.expander("💰 Financial Loss Predictions", expanded=True):
+                        financial_query = st.text_area(
+                            "Financial analysis query:",
+                            placeholder="Example: What's the expected financial loss for Shopee deliveries in Manila next month?",
+                            help="Include location and timeframe for better results"
+                        )
+                    
+                    # Courier Box
+                    with st.expander("🚚 Courier Performance", expanded=True):
+                        courier_query = st.text_area(
+                            "Courier performance query:",
+                            placeholder="Example: Compare CourierX and CourierY performance in Davao",
+                            help="Specify couriers and regions for comparison"
+                        )
+                
+                with col2:
+                    # Weather Box
+                    with st.expander("🌧️ Weather & Seasonal Impact", expanded=True):
+                        weather_query = st.text_area(
+                            "Weather impact query:",
+                            placeholder="Example: What's the impact of typhoon season on deliveries?",
+                            help="Consider seasonal patterns and weather events"
+                        )
+                    
+                    # Regional Box
+                    with st.expander("🗺️ Regional Analysis", expanded=True):
+                        regional_query = st.text_area(
+                            "Regional analysis query:",
+                            placeholder="Example: Show me the riskiest regions for deliveries",
+                            help="Compare different regions or focus on specific areas"
+                        )
+                
+                # Combine all queries
+                queries = []
+                if financial_query.strip():
+                    queries.append(financial_query)
+                if courier_query.strip():
+                    queries.append(courier_query)
+                if weather_query.strip():
+                    queries.append(weather_query)
+                if regional_query.strip():
+                    queries.append(regional_query)
+                
+                # Single analysis button
+                if st.button("Generate Comprehensive Analysis"):
+                    if queries:
+                        combined_query = " Additionally, ".join(queries)
                         # Get similar documents
-                        query_embedding = process_delivery_data(user_query)
+                        query_embedding = process_delivery_data(combined_query)
                         D, I = st.session_state.faiss_index.search(query_embedding, 1)
                         
                         # Generate analysis
                         context = st.session_state.documents[I[0][0]]
-                        analysis = generate_risk_analysis(context, user_query)
+                        analysis = generate_risk_analysis(context, combined_query)
                         
                         if analysis:
                             st.markdown("### Analysis Results")
                             st.markdown(analysis)
                     else:
-                        st.warning("Please enter a query for analysis.")
-                        
+                        st.warning("Please enter at least one query for analysis.")
+                
+                # Tips section at the bottom
+                st.markdown("### 💡 Tips for Better Results")
+                st.markdown("""
+                - Include specific locations/regions in your query
+                - Mention relevant timeframes
+                - Be specific about metrics you're interested in
+                - Compare multiple factors for comprehensive insights
+                """)
+                
         except Exception as e:
             st.error(f"Error processing file: {str(e)}")
