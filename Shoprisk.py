@@ -7,8 +7,8 @@ import requests
 import pandas as pd
 import numpy as np
 import faiss
-from openai.embeddings_utils import get_embedding
 from bs4 import BeautifulSoup
+from openai import OpenAI
 
 # Configure Streamlit page settings - MUST BE FIRST!
 st.set_page_config(page_title="ShopRisk", page_icon="📊", layout="wide")
@@ -43,13 +43,27 @@ with st.sidebar:
     st.markdown('<p style="color: white;">Enter OpenAI API token:</p>', unsafe_allow_html=True)
     col1, col2 = st.columns([5,1], gap="small")
     with col1:
-        openai.api_key = st.text_input('', type='password', label_visibility="collapsed")
+        api_key = st.text_input('', type='password', label_visibility="collapsed")
     with col2:
         check_api = st.button('▶', key='api_button')
     
     if check_api:
-        if not openai.api_key:
+        if not api_key:
             st.warning('Please enter your OpenAI API token!')
+        else:
+            try:
+                client = OpenAI(api_key=api_key)
+                # Test the API key with a simple completion
+                response = client.completions.create(
+                    model="gpt-3.5-turbo-instruct",
+                    prompt="Hello",
+                    max_tokens=5
+                )
+                st.session_state.api_key_valid = True
+                st.success('API key is valid!')
+            except Exception as e:
+                st.error('Invalid API key or API error occurred')
+                st.session_state.api_key_valid = False
 
 # Display warning page for first-time users
 if not st.session_state.accepted_terms:
