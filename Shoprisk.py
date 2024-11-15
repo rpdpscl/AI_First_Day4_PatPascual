@@ -1,6 +1,5 @@
 # Required imports for application functionality
 import os
-import openai
 import streamlit as st
 from streamlit_option_menu import option_menu
 import requests
@@ -10,7 +9,7 @@ import faiss
 from bs4 import BeautifulSoup
 from openai import OpenAI
 import tiktoken
-from langchain import OpenAI as LangChainOpenAI
+from langchain.llms import OpenAI as LangChainOpenAI
 import chromadb
 
 # Configure Streamlit page settings - MUST BE FIRST!
