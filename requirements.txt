@@ -1,6 +1,7 @@
 openai==0.28.1
 streamlit
 streamlit-option-menu
+streamlit-extras
 pandas
 numpy
 faiss-cpu
@@ -9,3 +10,9 @@ requests
 tiktoken==0.6.0
 langchain==0.1.20
 chromadb==0.5.0
+PyPDF2
+fpdf
+python-docx
+pytesseract
+sympy
+Pillow
