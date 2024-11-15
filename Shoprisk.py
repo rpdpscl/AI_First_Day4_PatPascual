@@ -10,7 +10,6 @@ from bs4 import BeautifulSoup
 from openai import OpenAI
 import tiktoken
 from langchain.llms import OpenAI as LangChainOpenAI
-import chromadb
 
 # Configure Streamlit page settings - MUST BE FIRST!
 st.set_page_config(page_title="ShopRisk", page_icon="📊", layout="wide")
