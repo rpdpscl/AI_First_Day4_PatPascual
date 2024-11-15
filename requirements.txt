@@ -1,0 +1,11 @@
+openai==0.28.1
+streamlit
+streamlit-option-menu
+pandas
+numpy
+faiss-cpu
+beautifulsoup4
+requests
+tiktoken==0.6.0
+langchain==0.1.20
+chromadb==0.5.0
