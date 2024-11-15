@@ -102,9 +102,9 @@ with st.sidebar:
         else:
             try:
                 client = OpenAI(api_key=api_key)
-                response = client.completions.create(
-                    model="gpt-3.5-turbo-instruct",
-                    prompt="Hello",
+                response = client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[{"role": "user", "content": "Hello"}],
                     max_tokens=5
                 )
                 st.session_state.api_key_valid = True
