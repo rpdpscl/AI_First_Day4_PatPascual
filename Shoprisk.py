@@ -9,7 +9,7 @@ import faiss
 from bs4 import BeautifulSoup
 from openai import OpenAI
 import tiktoken
-from langchain.llms import OpenAI as LangChainOpenAI
+from langchain_community.llms import OpenAI as LangChainOpenAI
 
 # Configure Streamlit page settings - MUST BE FIRST!
 st.set_page_config(page_title="ShopRisk", page_icon="📊", layout="wide")
